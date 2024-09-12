@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <title>welcome to my home</title>
     <style>
         *{
             /* border: 2px solid blue ; */
             margin: 0;
+            font-size: 36px;
+            text-align: center;
         }
         header{
             height: 25%;
@@ -23,6 +25,10 @@
             color: white ;
         }
     </style>
+    <script>
+        console.time('bigBang') ;
+        let timerBegin = new  Date() ;
+    </script>
 </head>
 <body>
     <header>
@@ -32,11 +38,23 @@
       我的照片
     </main>
     <footer>
-      我的联系方式
+      江西科技师范大学李健宏2024--2025
     </footer>
     <script>
       let myBody = document.querySelector('body');
-     myBody.style.height = innerHeight - 15 + 'px' ;
+       myBody.style.height = innerHeight - 15 + 'px' ;
+       console.timeEnd('bigBang') ;
+       myBody.querySelector('header').textContent = "页面渲染时间：" + ( new Date() - timerBegin ) + 'ms';
+      
+       console.time('xmb') ;
+       timerBegin = new Date() ;
+       let i= 1 ;
+       while (  i < 2**32 / 40 ){
+          i ++ ; 
+         }
+       console.timeEnd('xmb') ;
+       myBody.querySelector('main').textContent = "算一个小目标的时间：" + ( new Date() - timerBegin ) + 'ms';
     </script>
+    
 </body>
 </html>
