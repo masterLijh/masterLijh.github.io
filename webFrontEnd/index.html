@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        *{
+            /* border: 2px solid blue ; */
+            margin: 0;
+        }
+        header{
+            height: 25%;
+            background-color: aquamarine;
+        }
+         main{
+            height: 65% ;
+            background-color: bisque;
+        }
+        footer{
+            height: 10%;
+            background-color: brown;
+            color: white ;
+        }
+    </style>
+</head>
+<body>
+    <header>
+      我的项目
+    </header>
+    <main>
+      我的照片
+    </main>
+    <footer>
+      我的联系方式
+    </footer>
+    <script>
+      let myBody = document.querySelector('body');
+     myBody.style.height = innerHeight - 15 + 'px' ;
+    </script>
+</body>
+</html>
