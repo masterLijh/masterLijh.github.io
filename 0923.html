@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome to my home</title>
+    <style>
+        *{
+            /* border: 2px solid blue ; */
+            margin: 0;
+            font-size: 36px;
+            text-align: center;
+        }
+        p{
+            border: 1px solid blue;
+        }
+        header{
+            height: 25%;
+            background-color: aquamarine;
+        }
+         main{
+            height: 65% ;
+            background-color: bisque;
+        }
+        footer{
+            font-size: 0.5em;
+            height: 10%;
+            background-color: brown;
+            color: white ;
+        }
+        button{
+            padding: 0.1em;
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+      CET6-我 的 项 目
+    </header>
+    <main>
+      <p id="en">abandon</p>
+      <p id="pr">/ə'bændən/</p>
+      <p id="cn">vt.离弃,丢弃;遗弃,抛弃;放弃</p>
+    </main>
+    <button id="loadCet">读入单词</button>
+    <button id="randWord">随机单词</button>
+    <footer>
+      江西科技师范大学李健宏2024--2025
+    </footer>
+    <script>
+      let  cet6String= '' ;
+      let loadCet = select('button#loadCet');
+      let randWord = select('button#randWord');
+      loadCet.onclick = function(){
+         //console.log("按钮有效点击") ;
+         fetch('cet6.txt')
+         .then(res => res.text())
+         .then(txt => cet6String = txt);
+        } ;
+    randWord.onclick = function(){
+       if (cet6String.length == 0){
+        let s = '你要先读入单词！' ;
+        select('footer').textContent = s ;
+       }else{
+           let arr = cet6String.split('\r\n');
+           //console.log(arr);
+           let rand = Math.floor(Math.random() * arr.length );   
+           let str = arr[rand] ;
+           //console.log(str) ;
+           let begin = str.indexOf('\t') ;
+           let end = str.lastIndexOf('\t') ;
+           //console.log('b:' + begin +' e:' + end );
+           let en = str.slice(0,begin) ;
+           let pr = str.slice(begin+1,end) ;
+           let cn = str.slice(end +1) ; 
+           select('p#en').textContent = en ;
+           select('p#pr').textContent = pr ;
+           select('p#cn').textContent = cn ;
+       }
+    };
+     function select(selector){
+        let dom = document.querySelector(selector) ;
+        return dom ;
+      }
+    </script>
+    
+</body>
+</html>
