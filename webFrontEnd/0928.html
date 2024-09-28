@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome to my CET APP</title>
+    <style>
+        *{
+            border: 2px solid blue ; 
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        p{
+            border: 1px solid blue;
+        }
+        body{
+            height: 99vh ;
+            font-size: calc(0.5em + 2vw);
+        }
+        header{
+            height: 20%;
+            font-size: 2em;
+            background-color: aquamarine;
+        }
+        nav{
+            height: 7%;
+            font-size: 1.2em;
+        }
+        main{
+            height: 63% ;
+            font-size: 1.2em;
+            background-color: bisque;
+        }
+        footer{
+            
+            height: 10%;
+            background-color: brown;
+            color: white ;
+        }
+        button{
+            padding: 0.1em;
+            font-size: 1em;
+        }
+    </style>
+    <script>
+        let Model = {} ;
+        Model.cet6String = '' ;
+        Model.cetUrl = ['cet/cet1.txt','cet/cet2.txt','cet/cet3.txt'];
+        for(let i=0; i<Model.cetUrl.length; i++){
+            fetch(Model.cetUrl[i])
+            .then(res => res.text())
+            .then(txt => {
+                Model.cet6String += txt ;
+                UI.log('单词库：' + Model.cetUrl[i] + ' 加载成功!') ;       
+            });
+          } ;
+      
+    </script>
+</head>
+<body>
+    <header>
+      CET6-我 的 第一个 项 目
+    </header>
+    <nav>
+       <button id="randWord">随机单词</button>
+       <button id="beginWord">单词开始</button>
+       <button id="endWord">单词开始</button>
+    </nav>
+    <main>
+      <p id="en">abandon</p>
+      <p id="pr">/ə'bændən/</p>
+      <p id="cn">vt.离弃,丢弃;遗弃,抛弃;放弃</p>
+    </main>
+
+    <footer>
+      江西科技师范大学李健宏2024--2025
+    </footer>
+    <script>
+     let UI = {} ;
+      UI.log = function(s){
+      select('footer').textContent = s ;
+      } ;
+
+     function select(selector){
+        let dom = document.querySelector(selector) ;
+        return dom ;
+      }
+    </script>
+    
+</body>
+</html>
