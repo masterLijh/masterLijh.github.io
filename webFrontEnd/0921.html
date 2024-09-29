@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome to my home</title>
+    <style>
+        *{
+            /* border: 2px solid blue ; */
+            margin: 0;
+            font-size: 36px;
+            text-align: center;
+        }
+        p{
+            border: 1px solid blue;
+        }
+        header{
+            height: 25%;
+            background-color: aquamarine;
+        }
+         main{
+            height: 65% ;
+            background-color: bisque;
+        }
+        footer{
+            font-size: 0.5em;
+            height: 10%;
+            background-color: brown;
+            color: white ;
+        }
+    </style>
+    <script>
+        let timerBegin = new  Date() ;
+   /**********************
+     1.利用文本处理编辑技巧，将CET6单词的字符串定义为常量。  
+     2.利用字符串的API，用split把字符串处理成数组，用slice把字符串切割，用indexOf和lastIndexOf获取字符位置
+     3.利用对象创建语法、数组的push方法（API），生成以单词对象组成的数组，方便后续代码编写
+   */
+   const strCET6 = "a	/ei/	art.一(个);每一(个);(同类事物中)任一个\r\nabandon	/ə'bændən/	vt.离弃,丢弃;遗弃,抛弃;放弃\r\nabdomen	/æb'dəumen/	n.腹,下腹(胸部到腿部的部分)\r\nabatement	/ə'beitmənt/	n.减(免)税,打折扣,冲销\r\nabide	/ə'baid/	vi.(abode,abided)(by)遵守;坚持;vt.忍受,容忍\r\nability	/ə'biliti/	n.能力;本领;才能,才干;专门技能,天资\r\nable	/'eibl/	a.有(能力、时间、知识等)做某事,有本事的\r\nabnormal	/æb'nɔ:məl/	a.反常的,不正常的,不规则的\r\naboard	/ə'bɔ:d/	ad.&prep.在船(飞机、车)上;ad.上船(飞机、车)\r\nabolish	/ə'bɔliʃ/	vt.废除(法律、习惯等);取消\r\nabound	/ə'baund/	vi.大量存在;(~in,~with)充满,富于\r\nabout	/ə'baut/	ad.在周围;大约prep.关于;在周围a.准备\r\nabove	/ə'bʌv/	a.上述的ad.在上面,在前文prep.在..之上,高于\r\nabroad	/ə'brɔ:d/	ad.到国外,在国外;在传播,在流传\r\nabrupt	/ə'brʌpt/	a.突然的,出其不意的;(行为等)粗鲁无礼的\r\nabsence	/'æbsəns/	n.缺乏,不存在;缺席,不在场;缺席的时间\r\nabsent	/'æbsənt,æb'sent/	a.缺席的;缺乏的,不存在的;心不在焉的\r\nabsolute	/'æbsəlju:t/	a.绝对的,完全的;确实的,肯定的\r\nabsorb	/əb'sɔ:b,-'zɔ:b/	vt.吸收(水、光、蒸汽等）;使全神贯注;吞并/兼并\r\nabstract	/'æbstrækt/	a.抽象的n.摘要,文摘,梗概vt.提取;摘录要点\r\nabsurd	/əb'sə:d/	a.荒谬的,荒诞的,荒唐可笑的;不合理的\r\nabundance	/ə'bʌndəns/	n.丰富,充裕,大量\r\nabundant	/ə'bʌndənt/	a.大量(充足)的;(in)丰富(富裕)的\r\nabuse	/ə'bju:z,ə'bju:s/	vt.滥用;虐待,辱骂;诋毁n.滥用;恶习;弊端\r\nacademic	/,ækə'demik/	a.学院的,学术性的;大学的;理论的\r\nacademy	/ə'kædəmi/	n.(高等)专科院校;学术社团,协会,研究院\r\naccelerate	/ək'seləreit/	v.使加速,使增速,促进vi.加快,增加\r\naccent	/'æksənt,æk'sent/	n.口音,腔调;重音(符号)vt.重读\r\naccept	/ək'sept/	vt.接受,领受;认可,同意vi.同意,认可\r\nacceptable	/ək'septəbl/	adj.可接受的,合意的\r\nacceptance	/ək'septəns/	n.接受,接收,验收,接纳;承认,认可\r\naccess	/'ækses/	n.进入;接入;到达;享用权;入口vi.存取\r\naccessory	/ək'sesəri/	n.附件,附属品;(为全套衣服增加美感的)服饰\r\naccident	/'æksidənt/	n.意外遭遇,事故;意外(因素)\r\naccidental	/,æksi'dentəl/	a.偶然的;意外的;无意中的\r\nacclaim	/ə'kleim/	v.向…欢呼,公认n.欢呼,喝彩,称赞\r\naccommodate	/ə'kɔmədeit/	vt.向…提供住处;对...予以照顾性考虑\r\naccommodation	/ə,kɔmə'deiʃən/	n.(accommodations)住宿,留宿;膳宿供应\r\naccompany	/ə'kʌmpəni/	v.陪伴,陪同;伴随,和...一起发生,伴奏\r\naccomplish	/ə'kʌmpliʃ,ə'kɔm-/	v.实现(计划等);达到(目的);完成(任务)\r\naccord	/ə'kɔ:d/	vt.给予(欢迎、称颂等)vi.&n.符合,一致\r\naccordance	/ə'kɔ:dəns/	n.一致,和谐,符合\r\naccordingto	/ə'kɔ:diŋtu/	prep.据/照…(所说、所写);按…,视…\r\naccordingly	/ə'kɔ:diŋli/	ad.相应地,照着办,按照;于是,因此\r\naccount	/ə'kaunt/	a.叙述,说明;账目,账户vi.说明,解释\r\naccountant	/ə'kauntənt/	n.会计人员,会计师\r\naccumulate	/ə'kju:mjuleit/	vt.堆积,积累,积聚vi.累积,聚积\r\naccuracy	/'ækjurəsi/	n.准确（性）;精确;准确度\r\naccurate	/'ækjurət/	a.正确无误的;准确的,精确的\r\naccuse	/ə'kju:z/	vt.控告,指责vi.指控,指责\r\naccustomed	/ə'kʌstəmd/	a.惯常的;习惯的,适应的(一般作表语)\r\nache	/eik/	vi.痛;哀怜n.(指连续)疼痛、酸痛\r\nachieve	/ə'tʃi:v/	vt.实现,完成;达到,得到vi.达到预期目的\r\nacid	/'æsid/	n.酸,酸性物质a.酸的,酸味的;尖刻的\r\nacknowledge	/ək'nɔlidʒ/	vt.承认;接受;告知(信件等的)收到;答谢\r\nacquaint	/ə'kweint/	vt.(with)使认识,使了解,使熟悉\r\nacquaintance	/ə'kweintəns/	n.认识,相识,了解;相识的人,熟人\r\nacquire	/ə'kwaiə/	v.获得;学到(知识等);养成(习惯)\r\nacquisition	/,ækwi'ziʃən/	n.取得,学到,养成(习惯);获得的东西\r\nacre	/'eikə/	n.英亩;田地;地产\r\nacrobat	/'ækrəbæt/	n.特技演员,杂技演员\r\nacross	/ə'krɔs,ə'krɔ:s/	prep.横过,越过;在的对面ad.横过,穿过\r\nact	/ækt/	v.表演;举动;起作用n.行为,法令;一幕\r\naction	/'ækʃən/	n.行动,动作;作用;运转;行为;战斗\r\nactivate	/'æktiveit/	vt.启动,激活;驱动,驱使;使开始起作用\r\nactive	/'æktiv/	adj.活跃的,敏捷的,积极的;在活动中的\r\nactivity	/æk'tivəti/	n.活动;活力;能动性;\r\nactor	/'æktə/	n.男演员;演员,行动者\r\nactress	/'æktris/	n.女演员\r\nactual	/'æktʃuəl/	a.实际的;现实的,真实的,目前的\r\nacute	/ə'kju:t/	a.剧烈的;敏锐的;成锐角的;尖的,高音的\r\nadapt	/ə'dæpt/	vt.使适应,使适合;改编;改写vi.适应\r\nadd	/æd/	vt.加;增加(进);进一步说/写vi.(to)增添\r\naddict	/ə'dikt/	v.使沉溺;使上瘾n.沉溺于不良嗜好的人\r\naddition	/ə'diʃən/	n.加,加法;附加部分,增加(物)\r\nadditional	/ə'diʃənəl/	a.额外的,附加的,另外的\r\naddress	/ə'dres/	n.住址;致词v.向...致词;在信封上写姓名\r\nadequate	/'ædikwit/	adj.充足的,足够的;适当的,胜任的\r\nadhere	/əd'hiə/	vi.(to)粘着;坚持,遵守;依附,追随\r\nadjacent	/ə'dʒeisənt/	a.(to)(时间上)紧接着的;邻近的,毗邻的\r\nadjective	/'ædʒiktiv/	n.形容词a.形容词的,用作形容词的\r\nadjoin	/ə'dʒɔin/	v.临近,靠近;贴近,毗连\r\nadjust	/ə'dʒʌst/	vt.调节;整顿,调整vi.适应(to);使调节\r\nadminister	/əd'ministə/	v.施行,实施;掌管,料理...的事务;给予\r\nadministration	/əd,mini'streiʃən/	n.经营,管理;行政,行政机关,管理部门\r\nadmire	/əd'maiə/	vt.钦佩,赞赏,羡慕;称赞,夸奖\r\nadmission	/əd'miʃən/	n.允许进入;承认;入场费,入会费,入场券\r\nadmit	/əd'mit/	vt.承认,供认;准许…进入,准许...加入\r\nadolescent	/,ædəu'lesənt/	n.青少年a.青春期的,青少年的\r\nadopt	/ə'dɔpt/	vt.采用,采取(态度等);选定;收养\r\nadore	/ə'dɔ:/	vt.崇拜,敬慕,爱慕;非常喜欢\r\nadult	/'ædʌlt,ə'dʌlt/	n.成年人a.成年的,充分长成的,成熟的\r\nadvance	/əd'vɑ:ns,əd'væns/	n.前进,预付vi.前进,进展vt.促进,推进\r\nadvanced	/əd'vɑ:nst,-'vænst/	a.超前的,先进的;高级的;开明的;前进的\r\nadvantage	/əd'vɑ:ntidʒ/	n.优点,长处,有利条件;利益,好处\r\nadvent	/'ædvənt/	n.(重要事件等的)到来,来临\r\nadventure	/əd'ventʃə,æd-/	n.冒险,冒险活动,奇遇vt.大胆进行\r\nadverb	/'ædvə:b/	n.副词a.副词的\r\nadverse	/'ædvə:s,æd'və:s/	a.逆的,相反的;敌对的;不利的;有害的\r\nadvertise	/'ædvətaiz/	vt.公告,公布;为...做广告vi.登广告" ;
+   let CET6 = [] ; //构建单词对象组成的数组，其英文、音标、中文三个属性设为en、pn、cn
+  {
+     let arrCET6 =  strCET6.split('\r\n') ;
+       for(let e of arrCET6){
+         let word = { } ;
+         let begin = e.indexOf('\t') ;
+         let end =  e.lastIndexOf('\t') ;
+            word.en = e.slice(0,begin) ;
+            word.pn = e.slice(begin+1,end) ;
+            word.cn =  e.slice(end+1) ;
+           CET6.push(word) ;      
+       }
+      }
+
+    </script>
+</head>
+<body>
+    <header>
+      我的项目CET6
+    </header>
+    <nav>
+      <button id="begin"> 单词开始 </button>
+      <button id="next"> 单词继续 </button>
+      <button id="rand"> 单词随机 </button>
+    </nav>
+    <main>
+      <p id="en">english word</p>
+      <p id="pn">pronounce</p>
+      <p id="cn">中文释义</p>
+    </main>
+    <footer>
+      江西科技师范大学李健宏2024--2025
+    </footer>
+    <script>
+      //利用DOM和样式实现全屏
+      let myBody = document.querySelector('body');
+          myBody.style.height = innerHeight - 15 + 'px' ;
+      select('footer').textContent = "准备好了，计算和渲染费时：" + ( new Date() - timerBegin ) + 'ms！';
+      
+       
+    //利用按钮的onclick属性，为按钮设定异步执行的代码
+     select('#begin').onclick = function(){
+        select('p#en').textContent = CET6[0].en ;
+        select('p#pn').textContent = CET6[0].pn ;
+        select('p#cn').textContent = CET6[0].cn ;
+     } ;
+     select('#rand').onclick = function(){
+        let rand = Math.floor(CET6.length * Math.random() ) ;
+        let word = CET6[rand] ;
+        select('p#en').textContent = word.en ;
+        select('p#pn').textContent = word.pn ;
+        select('p#cn').textContent = word.cn ;
+        i = rand ;         
+     } ;
+   
+  //全局变量i的理解异常重要
+   let i = 0 ;
+   select('#next').onclick = function(){
+        i++ ;
+        if(i === CET6.length){
+          i = 0 ;
+        }
+        let word = CET6[i] ;
+        select('p#en').textContent = word.en ;
+        select('p#pn').textContent = word.pn ;
+        select('p#cn').textContent = word.cn ;        
+     } ;
+   //自定义select函数，简化对文档DOM元素的引用语法
+   function select(str){
+    let dom = document.querySelector(str);
+    return dom ;
+   }
+   </script>
+    
+</body>
+</html>
