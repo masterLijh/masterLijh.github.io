@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轻轻松松背单词--CET6</title>
+    <style>
+        *{
+            /* border: 2px solid blue ;  */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        p{
+            border: 1px solid blue;
+        }
+        body{
+            height: 99vh ;
+            font-size: calc(0.5em + 2vw);
+            position: relative;
+        }
+        header{
+            height: 20%;
+            font-size: 2em;
+            background-color: aquamarine;
+        }
+        nav{
+            height: 7%;
+            font-size: 1.2em;
+        }
+        main{
+            height: 63% ;
+            font-size: 1.2em;
+            background-color: bisque;
+        }
+        footer{
+            
+            height: 10%;
+            background-color: brown;
+            color: white ;
+        }
+        button{
+            padding: 0.1em;
+            font-size: 1em;
+        }
+        form{
+            font-size: 1.2em;
+            background-color: burlywood;
+            position: absolute;
+            width: 90%;
+            height: 80%;
+            left: 5% ;
+            top: 10% ;
+            border: 2px solid black;
+        }
+        form input{
+            font-size: 1.2em;
+        }
+    </style>
+    <script>
+        //定义了全局变量，Model对象，用来给程序建立理解模型
+        let Model = {
+
+        } ; //每个对象实例，都会开辟一个独立的内存空间，用来存放数据
+      
+        Model.users = [ {userName: 'Mike' , passWord: '1234'} ] ;
+        //读入用户外存中的localStorage的用户组
+        {
+         
+          let str = localStorage.getItem('users') ;
+         if(str){
+           let users = JSON.parse(str) ;
+           Model.users = users ;
+          }
+        }
+        //以后当前单词，单词索引放在 Model.pos属性中
+        Model.pos = 0 ;
+          //为应对较慢的网络环境，下面先直接给出20个单词的数据
+        Model.cet6String = "a	/ei/	art.一(个);每一(个);(同类事物中)任一个\r\nabandon	/ə'bændən/	vt.离弃,丢弃;遗弃,抛弃;放弃\r\nabdomen	/æb'dəumen/	n.腹,下腹(胸部到腿部的部分)\r\nabatement	/ə'beitmənt/	n.减(免)税,打折扣,冲销\r\nabide	/ə'baid/	vi.(abode,abided)(by)遵守;坚持;vt.忍受,容忍\r\nability	/ə'biliti/	n.能力;本领;才能,才干;专门技能,天资\r\nable	/'eibl/	a.有(能力、时间、知识等)做某事,有本事的\r\nabnormal	/æb'nɔ:məl/	a.反常的,不正常的,不规则的\r\naboard	/ə'bɔ:d/	ad.&prep.在船(飞机、车)上;ad.上船(飞机、车)\r\nabolish	/ə'bɔliʃ/	vt.废除(法律、习惯等);取消\r\nabound	/ə'baund/	vi.大量存在;(~in,~with)充满,富于\r\nabout	/ə'baut/	ad.在周围;大约prep.关于;在周围a.准备\r\nabove	/ə'bʌv/	a.上述的ad.在上面,在前文prep.在..之上,高于\r\nabroad	/ə'brɔ:d/	ad.到国外,在国外;在传播,在流传\r\nabrupt	/ə'brʌpt/	a.突然的,出其不意的;(行为等)粗鲁无礼的\r\nabsence	/'æbsəns/	n.缺乏,不存在;缺席,不在场;缺席的时间\r\nabsent	/'æbsənt,æb'sent/	a.缺席的;缺乏的,不存在的;心不在焉的\r\nabsolute	/'æbsəlju:t/	a.绝对的,完全的;确实的,肯定的\r\nabsorb	/əb'sɔ:b,-'zɔ:b/	vt.吸收(水、光、蒸汽等）;使全神贯注;吞并/兼并\r\nabstract	/'æbstrækt/	a.抽象的n.摘要,文摘,梗概vt.提取;摘录要点" ;
+        
+
+        //把字符串处理成单词对象（中文，英文，释义等3个属性），存放到Model.CET6内
+        Model.CET6 = [] ;
+     { //局部代码块，处理单词数据，避免引入全局变量
+        let  createCET6 = function(str){
+        let arr = str.split('\r\n') ;
+         for(let i=0; i< arr.length ; i++){
+             let s = arr[i] ;
+             let word = {} ;
+             let wordArr = s.split('\t') ;
+                 word.en = wordArr[0] ;
+                 word.pn = wordArr[1] ;
+                 word.cn = wordArr[2] ;
+             Model.CET6.push(word) ;    
+         }
+       }//createCET6 函数结束，结束后，结果Model.CET6数组存放了“单词对象”组成的数据
+        //现在在这里，用fetch异步读取三个网上的单词文本
+        fetch('cet/cet1.txt')
+        .then(res => res.text())
+        .then(txt => {
+                    //  Model.cet6String = txt;
+                     Model.CET6 = [] ;
+                     createCET6(txt) ;
+        }) ;
+        fetch('cet/cet2.txt')
+        .then(res => res.text())
+        .then(txt => {                             
+                     createCET6(txt) ;
+                     UI.log('第二部分单词已经读入系统！');
+                  }
+        ) ;
+        fetch('cet/cet3.txt')
+        .then(res => res.text())
+        .then(txt => {                             
+                     createCET6(txt) ;
+                     UI.log('最后一部分单词终于读入了系统！');
+                  }
+        ) ;
+        //本函数把Model.cet6String处理成单词对象，单词对象被压入Model.CET6数组
+       createCET6(Model.cet6String) ; 
+      
+    } //局部代码块，
+              
+    </script>
+</head>
+<body>
+    <header>
+      轻轻松松背单词——CET6
+    </header>
+    <nav>
+       <button id="randWord">随机单词</button>
+       <button id="firstWord">首个单词</button>
+       <button id="nextWord">下个单词</button>
+       <button id="lastWord">结尾单词</button>
+     </nav>
+    <main>
+      <p id="en"></p>
+      <p id="pn"></p>
+      <p id="cn"></p>
+    </main>
+
+    <footer>
+      江西科技师范大学李健宏2024--2025
+    </footer>
+    <form id="myForm">
+        <p>系统登录和注册窗口</p>
+        名字：<input type="text" name="userName"/>
+        <hr/>
+        密码：<input type="password"  name="passWord"/>
+        <hr/>
+        <button id = 'login' name="login">
+           登录
+        </button>
+        <button id = 'sign' name="sign">
+            注册
+         </button>
+      </form>
+    <script>
+     
+    //与用户互动的代码从此处开始
+     let UI = {} ;
+         UI.form = select('form#myForm') ;
+     //表单form下面的按钮和文本框可以用标记中定义的name属性来访问
+    UI.form.sign.onclick = function(ev){
+        ev.preventDefault() ;
+     if(UI.form.userName.value.trim() !=="" && UI.form.passWord.value.trim() !==""){
+        let name = UI.form.userName.value ;
+        let pass = UI.form.passWord.value ;
+        let user = { userName : name , 
+                     passWord : pass
+        } ;
+        let users = Model.users ;
+        let exist = false ;
+           for(let u of users){
+             if(u.userName === user.userName){
+                exist = true ;
+                break ;
+             }
+           }
+           if(exist){
+            UI.log('您注册的用户名：'+ user.userName + '重复存在，不成功！') ;
+           }else{
+            users.push(user) ;
+            let s = JSON.stringify(users);
+            localStorage.setItem('users',s) ;
+            UI.log('您注册的用户：'+ user.userName + '已经成功！') ;
+
+           }
+        }//用户名和密码不为空
+      } ; //end of 用户注册
+      UI.form.login.onclick = function(ev){
+        ev.preventDefault() ;
+        let name = UI.form.userName.value ;
+        let pass = UI.form.passWord.value ;
+        let user = { userName : name , 
+                     passWord : pass
+        } ;
+        let users = Model.users ;
+        let exist = false ;
+           for(let u of users){
+             if(u.userName === user.userName && u.passWord === user.passWord ){
+                exist = true ;
+                break ;
+             }
+           }
+           if(exist){
+            UI.log('用户名：'+ user.userName + '登录成功！') ;
+            UI.form.style.display = 'none' ;
+           }else{
+            UI.log( '用户名：' + user.userName + '，登录失败！') ;
+           }
+      } ; //end of 用户登录
+      UI.form.userName.onblur = function(ev){
+        ev.preventDefault() ;
+        let userName = UI.form.userName.value.trim()  ;
+        if(userName == ''){
+            UI.log('用户名不能为空白！') ;
+            UI.form.userName.focus() ;
+        }
+      } ;
+      UI.form.passWord.onblur = function(ev){
+        ev.preventDefault() ;
+        let passWord = UI.form.passWord.value.trim()  ;
+        if(passWord == ''){
+            UI.log('密码为空白，建议你不要这样！') ;
+            UI.form.passWord.focus() ;
+        }
+      } ;
+
+      UI.log = function(s){
+       select('footer').textContent = s ;
+      } ;
+     UI.printWord = function(word){ //word是单词对象的数据结构word.en，word.pn，word.cn
+        select('p#en').textContent = word.en ;
+        select('p#pn').textContent = word.pn ;
+        select('p#cn').textContent = word.cn ;
+     } ;
+     select('button#firstWord').onclick = function(){
+          let CET6 =  Model.CET6 ;
+              Model.pos = 0 ;
+          let word = CET6[Model.pos] ;
+          UI.printWord(word);
+          UI.log('你选中了第 1 个单词');
+       } ;
+    select('button#lastWord').onclick = function(){
+          let CET6 =  Model.CET6 ;
+              Model.pos = CET6.length -1 ;
+          let word = CET6[Model.pos] ;
+          UI.printWord(word);
+          UI.log('你选中了最后一个单词');
+       } ;
+       select('button#randWord').onclick = function(){
+          let CET6 =  Model.CET6 ;
+          let rand = Math.floor( Math.random() * CET6.length );
+              Model.pos = rand ;
+          let word = CET6[Model.pos] ;
+          UI.printWord(word);
+          UI.log('你随机选中了第 '+(rand+1)+' 个单词');
+       } ;
+       select('button#nextWord').onclick = function(){
+          let CET6 =  Model.CET6 ;
+          if(Model.pos === CET6.length - 1 ){
+            Model.pos = 0 ;
+          }else{
+            Model.pos ++ ;
+          }
+          let word = CET6[Model.pos] ;
+          UI.printWord(word);
+          UI.log('你选中了第' + (Model.pos+1) +  '个单词！');
+       } ;
+     
+       function select(selector){
+        let dom = document.querySelector(selector) ;
+        return dom ;
+      }
+    </script>
+    
+</body>
+</html>
