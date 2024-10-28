@@ -157,7 +157,7 @@
             let ok = false ; //默认时，正确中文答案没有放置
             
             for(let i=0 ; i<5 ; i++){
-                let  lv = Math.random() *  4 ;
+                let  lv = Math.random() *  (5 - i) ;
                 if(lv < 1 && !ok ){
                     ok = true ;
                     cnArr.push(CET6[pos].cn) ;
