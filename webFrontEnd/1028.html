@@ -155,14 +155,14 @@
             let cnArr = [] ;
             
             let ok = false ; //默认时，正确中文答案没有放置
-            let lv,rand ;
+            
             for(let i=0 ; i<5 ; i++){
-                 lv = Math.random() *  5 ;
+                let  lv = Math.random() *  4 ;
                 if(lv < 1 && !ok ){
                     ok = true ;
                     cnArr.push(CET6[pos].cn) ;
                 }else{
-                     rand = Math.floor(Math.random() * Model.CET6.length ) ;
+                    let  rand = Math.floor(Math.random() * Model.CET6.length ) ;
                     cnArr.push(Model.CET6[rand].cn) ;
                     }
              }//循环5次，产生中文随机数组
