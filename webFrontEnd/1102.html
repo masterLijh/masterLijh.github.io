@@ -12,7 +12,7 @@
         text-align: center;
     }
     * + * {
-        margin-top: 0.5em;
+        margin-top: 0.2em;
     }
     body{
      font-size: calc(12px+1vh);
@@ -20,7 +20,8 @@
      position: relative;
     }
     header{font-size: 2em;
-           height: 20% ;
+           height: 15% ;
+           position: relative;
     }
     nav button{
         font-size: 1.2em;
@@ -64,6 +65,7 @@
       border:1px solid blue ;
       background-color: antiquewhite;
       cursor: pointer;
+      font-size: 0.8em;
     }
     p.cn:hover{
         color: blue ;
@@ -73,12 +75,14 @@
         color: red;
         position: absolute;
         right: 0.5em;
+        top:2em;
     }
 </style>
 <script>
   //Model用于记录程序的数据和运行状态
     let Model = { 
         timerBegin : new Date() ,
+        numOfLearning : 10
      } ;
         
         Model.CET6 = [] ;
@@ -202,10 +206,11 @@
         </span>
     </header>
     <nav>
-        <button id="firstWord">开始单词</button>
-        <button id="nextWord">继续单词</button>
+        <button id="firstWord">开背单词</button>
+        <button id="nextWord">继续背词</button>
         <button id="lastWord">最后单词</button>
-        <button id="saveWord">进度存盘</button>
+        <button id="saveWord">存储进度</button>
+        <button id="reviewWord">复习单词</button>
     </nav>
     <main>
         <p id="en"></p>
@@ -290,8 +295,11 @@
              Model.user = userName ;
              UI.form.style.display = 'none' ;
              //预读每个用户的背单词的状态
-                 learning = [] ;
-                  for(let i=0;i<20;i++){
+             let learned = localStorage.getItem( Model.user + '-learned') ;
+             Model.learned = JSON.parse(learned) ;
+               
+              learning = [] ;
+                  for(let i=0;i < Model.numOfLearning ; i++){
                     let rand = Math.floor(Math.random() * Model.CET6.length ) ;
                     let word = Model.CET6[rand] ;
                         word.sn = rand ;
@@ -355,7 +363,7 @@
      }
 
      select('button#saveWord').onclick = function(){
-        
+        if(Model.pos === Model.numOfLearning -1){
          let learned = localStorage.getItem(Model.user+'-learned') ;
          if(learned){
                  learned = JSON.parse(learned) ;
@@ -374,14 +382,41 @@
                 }
              let str = JSON.stringify(learned);
              localStorage.setItem(Model.user+'-learned' ,str) ;
-             UI.log("您已经学习了 " + learned.length + "个单词！" ) ;
+             UI.log("您曾学习的单词总数为： " + learned.length + " 个！" ) ;
           }else{
              let  str = JSON.stringify(Model.learning);
              localStorage.setItem(Model.user+'-learned', str) ;
              UI.log("您已经学习了 " + Model.learning.length + "个单词！" ) ;
           }
-       
-     };//切换背诵单词组
+        }else{
+            UI.log('本组单词还未背完，不能存储学习进度！') ;
+        }
+     };//saveWord 结束
+ 
+     select('button#reviewWord').onclick = function(){
+       Model.learning = [] ;
+      let learned = Model.learned ;
+      let randLearned = function(){
+          let rand = Math.floor(Math.random() * learned.length) ;
+          let word = learned[rand] ;
+          if(word.level < 1 ){
+            randLearned() ;
+          }else{
+            return word ; 
+           }
+       } ;
+      for(let i=0;i < Model.numOfLearning  ;i++){
+          let word = randLearned() ;
+          if(word){
+             Model.learning.push(word) ;
+          }
+      }
+      Model.pos = 0 ;
+      Model.numOfLearning = Model.learning.length ;
+      UI.printWord() ;
+      UI.response('复习'+ Model.learning.length +'个单词！');
+    } ; //reviewWord 结束
+     
 
 // 创建全局函数
         function select(s){
