@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轻松背单词--CET6</title>
+</head>
+<style>
+   *{
+        margin: 0;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    * + * {
+        margin-top: 0.5em;
+    }
+    body{
+     font-size: calc(12px+1vh);
+     height: 98vh ;    
+     position: relative;
+    }
+    header{font-size: 2em;
+           height: 20% ;
+    }
+    nav button{
+        font-size: 1.2em;
+        height: 6% ;
+    }
+    main{font-size: 1.6em;
+        height: 60% ;
+        position: relative;
+    }
+    form{
+        position: absolute ;
+        width: 90% ;
+        height: 50% ;
+        border: 2px solid gray;
+        left: 5% ;
+        top: 10% ;
+        background-color: antiquewhite;
+        font-size: 1.1em ;
+    }
+    form input{
+        font-size: 1.1em ;
+        width: 6em;
+    }
+    form button{
+        font-size: 1.3rem ;
+        margin-right: 1em;
+    }
+    footer{
+        height: 10% ;
+        font-size:1.2em;
+    }
+    span#level{
+        display: block;
+        position: absolute;
+        right:20px;
+        top:1px;
+        color:blue;
+        font-size: 0.5em;
+    }
+    p.cn{
+      border:1px solid blue ;
+      background-color: antiquewhite;
+      cursor: pointer;
+    }
+    p.cn:hover{
+        color: blue ;
+    }
+    header span#response{
+        font-size: 0.8em;
+        color: red;
+        position: absolute;
+        right: 0.5em;
+    }
+</style>
+<script>
+  //Model用于记录程序的数据和运行状态
+    let Model = { 
+        timerBegin : new Date() ,
+     } ;
+        
+        Model.CET6 = [] ;
+ {//局部代码，用于处理单词数据，处理完成的单词对象数据放在Model.CET6数组中
+    //createCET6可以在局部代码中，为Model.CET6增加单词对象，入口参数s是单词组成字符串
+    let createCET6 = function(s){
+        let cetArr = s.split('\r\n') ;
+     for(let i=0;i<cetArr.length;i++){
+        let wordArr = cetArr[i].split('\t');
+        let obj = {} ;
+          obj.en = wordArr[0] ;
+          obj.pn = wordArr[1] ;
+          obj.cn = wordArr[2] ;
+          let enlength = obj.en.length ;
+          if(enlength > 1 && enlength < 5){
+            obj.level = 1 ;
+          }else{
+            if(enlength < 8 ){
+                obj.level = 2 ;
+            }else{
+                obj.level = 3 ;
+            }
+          }
+          Model.CET6.push(obj) ;
+      }
+    }//createCET结束
+//为了让慢速网络环境能够迅速响应用户的操作，我们先在代码中存放3个单词
+   let cet6String = "a	/ei/	art.一(个);每一(个);(同类事物中)任一个\r\nabandon	/ə'bændən/	vt.离弃,丢弃;遗弃,抛弃;放弃\r\nabdomen	/æb'dəumen/	n.腹,下腹(胸部到腿部的部分)" ;
+    createCET6(cet6String) ;
+//远程异步读取三个大型单词文本
+    fetch('cet/cet1.txt') //读取cet/cet1.txt
+    .then(resp => resp.text())
+    .then(txt => {
+        Model.CET6 = [] ;
+        createCET6(txt) ;
+        UI.log('系统成功读取了'+ Model.CET6.length +'个单词！') ;
+    }) ;
+    setTimeout(function(){ //读取cet/cet2.txt
+        fetch('cet/cet2.txt') //读取cet/cet2.txt
+        .then(resp => resp.text())
+        .then(txt => {
+         createCET6(txt) ;
+        UI.log('系统成功读取了'+ Model.CET6.length +'个单词！') ;
+    }) ;
+    } , 2 * 1000); 
+    setTimeout(function(){
+        fetch('cet/cet3.txt')
+        .then(res => res.text())
+        .then(txt => {
+            createCET6(txt) ;
+            UI.log('系统最后成功读取了'+ Model.CET6.length +'个单词！') ;
+        } );
+    } , 5 * 1000) ;
+    
+ }//局部代码结束
+   Model.pos = 0 ; //pos用于记录系统的当前单词
+   Model.users = [] ;
+        { //预读本地硬盘的用户信息
+            //假设本地localStorage对象的users属性存放用户信息
+            let str = localStorage.getItem('users') ;
+            if(str){
+             let users = JSON.parse(str) ;
+              Model.users = users ;
+            }
+          
+           
+        }
+
+ let UI = {} ; //UI用于表达用户界面，以及改变用户界面上的的内容
+   UI.printWord = function(){ //用于把当前单词（Model.pos存储的索引）显示出来
+       //让全局变量与局部变量联系起来
+            let CET6 = Model.learning ;
+            let pos = Model.pos ;
+
+            select('p#en').textContent = CET6[pos].en ;
+            select('p#pn').textContent = CET6[pos].pn ;
+            
+            select('span#level').textContent = '难度: ' + CET6[pos].level;
+            //产生一个数组，包含5个单词的中文，其中一个是单词本身
+            let cnArr = [] ;
+            
+            let ok = false ; //默认时，正确中文答案没有放置
+            for(let i=0 ; i < 5 ; i++){
+                let lv = Math.random() * (5 - i) ;
+                if(lv < 1 && !ok ){
+                    ok = true ;
+                    cnArr.push(CET6[pos].cn) ;
+                }else{
+                    let rand = Math.floor(Math.random() * Model.CET6.length ) ;
+                    cnArr.push(Model.CET6[rand].cn) ;
+                    }
+             }//循环5次，产生中文随机数组
+             if(!ok){
+                    ok = true ;
+                    cnArr[4] = CET6[pos].cn ;
+                }
+               
+            for(let i=1; i<6 ;i++){
+               select('p#cn'+ i).textContent =  cnArr[i-1] ;
+            }
+
+        UI.log('你选择了第 '+ (pos+1) + ' 个单词');
+
+      } ;
+    
+ 
+
+
+  UI.log = function(s){
+    select('footer').textContent = s ;
+  };
+  UI.response = function(s){
+    select('span#response').textContent = s ;
+  }
+  
+</script>
+<body>
+    <header>
+        CET6-轻轻松松背单词
+        <span id = 'response'>
+        </span>
+    </header>
+    <nav>
+        <button id="firstWord">开始单词</button>
+        <button id="nextWord">继续单词</button>
+        <button id="lastWord">最后单词</button>
+        <button id="saveWord">进度存盘</button>
+    </nav>
+    <main>
+        <p id="en"></p>
+         <span id ='level'>难度：</span>
+        <p id="pn"></p>
+        <p id="cn1" class="cn"></p>
+        <p id="cn2" class="cn"></p>
+        <p id="cn3" class="cn"></p>
+        <p id="cn4" class="cn"></p>
+        <p id="cn5" class="cn"></p>
+    </main>
+    <footer>
+        江西科技师范大学李健宏2024--2025
+    </footer>
+    <form>
+        <p>
+            请您登录
+        </p>
+        <p>用户：<input type="text" name="user"/></p>
+        <p>密码：<input type="password" name="pass" /></p>
+        <button id = "signIn">
+           注册
+        </button>
+        <button id = "loginIn">
+           登录
+        </button>
+    </form>
+   <script>
+    
+        UI.form = select('form');
+       /**
+         *异步代码开始，用于用户UI的交互控制（按钮点击事件） 
+         * 
+         */
+        select('button#signIn').onclick = function(ev){
+            ev.preventDefault() ;
+            let users = Model.users ;
+            let userName = UI.form.user.value.trim() ;
+            let passWord = UI.form.pass.value.trim() ;
+         if(userName.length > 0 && passWord.length > 0){
+                 let user = {
+                  'userName': userName ,
+                  'passWord': passWord
+                } 
+                let exist = false ;
+                for(let u of users){
+                    if(u.userName == userName){
+                        exist = true ;
+                        break ;
+                    }
+                }
+                if(exist){
+                    UI.log(userName + '已经存在， 注册不成功！') ;
+                }else{
+                    UI.log(userName + '注册成功！') ;
+                    users.push(user) ;
+                }
+                //所有在网络和磁盘IO的异步数据的传送，要用JSON字符串
+                let s = JSON.stringify(users) ;
+                localStorage.setItem('users', s) ;
+       }else{//有效的用户名和密码注册
+         UI.log("无效注册，用户名和密码不能为空");
+        
+       }
+    } ; //注册按钮点击事件
+
+        select('button#loginIn').onclick = function(ev){
+            ev.preventDefault() ;
+            let users = Model.users ;
+            let userName = UI.form.user.value ;
+            let passWord = UI.form.pass.value ;
+            
+           let success = false ;
+           for(let u of users){
+             if(u.userName === userName && u.passWord === passWord){
+                success = true ;
+                break ;
+             }
+           }
+           if(success &&  Model.CET6.length > 5000 ){
+             UI.log(userName + '成功登录！') ;
+             Model.user = userName ;
+             UI.form.style.display = 'none' ;
+             //预读每个用户的背单词的状态
+                 learning = [] ;
+                  for(let i=0;i<20;i++){
+                    let rand = Math.floor(Math.random() * Model.CET6.length ) ;
+                    let word = Model.CET6[rand] ;
+                        word.sn = rand ;
+                    learning.push(word) ;
+                   }
+                  Model.learning =  learning ;
+              UI.printWord() ;
+           }else{ //不允许登录的二种情况，用户名和密码问题， 单词库未加载的问题
+             if(!success){
+                  UI.log(userName + '登录不成功，请查看用户名和密码！') ;
+                }
+             if(Model.CET6.length < 5000){
+                UI.log('单词库还未加载完毕，请等会儿再登录！') ;
+             }
+          }
+                
+        } ; //登录按钮点击事件
+
+
+        //为页面上DOM元素（四个按钮），设置点击程序的功能
+        select('button#firstWord').onclick = function(){
+           Model.pos = 0 ;
+           UI.printWord() ;
+           
+        } 
+
+    
+        select('button#nextWord').onclick = function(){
+           if( Model.pos < Model.learning.length -1){
+                Model.pos ++ ;
+            }else{
+                Model.pos = 0 ;
+            }
+               UI.printWord() ;
+               UI.response('加油，继续吧！');
+              
+        } 
+
+        select('button#lastWord').onclick = function(){
+            Model.pos = Model.learning.length - 1  ;
+            UI.printWord() ;
+           
+        }
+        /***
+         *  5个中文选项的动态代码，记录用户是否认识本单词
+         * */
+   UI.cnDoms = document.querySelectorAll('p.cn') ;
+     for(let cn of UI.cnDoms){
+        cn.onclick = function(){
+            // console.log(cn.textContent) ;
+            let txt = cn.textContent ;
+            let pos = Model.pos ;
+            if(txt === Model.learning[pos].cn){
+               UI.response("答对了!");
+               Model.learning[pos].level -- ;
+            }else{
+               UI.response("答错了!");
+               Model.learning[pos].level ++ ;
+            }
+        }
+     }
+
+     select('button#saveWord').onclick = function(){
+        
+         let learned = localStorage.getItem(Model.user+'-learned') ;
+         if(learned){
+                 learned = JSON.parse(learned) ;
+                 for(let word of Model.learning){
+                    let found = false ;
+                    for(let l of learned){
+                        if (l.sn == word.sn){
+                            l.level = word.level ;
+                            found = true ;
+                            break ;
+                        }
+                    }
+                  if(!found){
+                    learned.push(word) ;
+                  } 
+                }
+             let str = JSON.stringify(learned);
+             localStorage.setItem(Model.user+'-learned' ,str) ;
+             UI.log("您已经学习了 " + learned.length + "个单词！" ) ;
+          }else{
+             let  str = JSON.stringify(Model.learning);
+             localStorage.setItem(Model.user+'-learned', str) ;
+             UI.log("您已经学习了 " + Model.learning.length + "个单词！" ) ;
+          }
+       
+     };//切换背诵单词组
+
+// 创建全局函数
+        function select(s){
+         let dom = document.querySelector(s) ;
+         return dom ;
+         
+        }
+    </script>
+</body>
+</html>
