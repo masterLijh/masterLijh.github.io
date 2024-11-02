@@ -11,11 +11,11 @@
         box-sizing: border-box;
         text-align: center;
     }
-    * + * {
+    /* * + * {
         margin-top: 0.2em;
-    }
+    } */
     body{
-     font-size: calc(12px+1vh);
+     font-size: calc(10px+1vh);
      height: 98vh ;    
      position: relative;
     }
@@ -23,14 +23,33 @@
            height: 15% ;
            position: relative;
     }
+    nav{ height: 6% ;}
     nav button{
         font-size: 1.2em;
-        height: 6% ;
+       }
+    button.small{
+        width: 30%;
+        padding: 0.1em 0.2em;  
     }
-    main{font-size: 1.6em;
+    button.big{
+        width: 45%;
+        padding: 0.1em 0.5em;  
+    }
+    main{
+        margin-top: 1em;
+        font-size: 1.6em;
         height: 60% ;
         position: relative;
     }
+    main p#en{
+        font-size: 1.6em;
+        color:lightblue;
+        text-shadow: 2px 2px gray ;
+    }
+    main p#pn{
+        font-size: 1.2em;
+        color:lightseagreen;
+       }
     form{
         position: absolute ;
         width: 90% ;
@@ -50,7 +69,7 @@
         margin-right: 1em;
     }
     footer{
-        height: 10% ;
+        height: 20% ;
         font-size:1.2em;
     }
     span#level{
@@ -66,6 +85,15 @@
       background-color: antiquewhite;
       cursor: pointer;
       font-size: 0.8em;
+      margin-bottom: 0.2em;
+    }
+    p.cn.right{
+      background-color: yellow;
+      color: red ;
+    }
+    p.cn.wrong{
+      background-color: gray;
+      color:white;
     }
     p.cn:hover{
         color: blue ;
@@ -82,8 +110,10 @@
   //Model用于记录程序的数据和运行状态
     let Model = { 
         timerBegin : new Date() ,
-        numOfLearning : 10
-     } ;
+        numOfLearning : 10,
+        learning : [] ,
+        learned : []
+    } ;
         
         Model.CET6 = [] ;
  {//局部代码，用于处理单词数据，处理完成的单词对象数据放在Model.CET6数组中
@@ -182,6 +212,7 @@
                
             for(let i=1; i<6 ;i++){
                select('p#cn'+ i).textContent =  cnArr[i-1] ;
+               select('p#cn'+ i).className = 'cn' ; //清楚用户在点击选择时产生的对、错样式
             }
 
         UI.log('你选择了第 '+ (pos+1) + ' 个单词');
@@ -206,11 +237,12 @@
         </span>
     </header>
     <nav>
-        <button id="firstWord">开背单词</button>
-        <button id="nextWord">继续背词</button>
-        <button id="lastWord">最后单词</button>
-        <button id="saveWord">存储进度</button>
-        <button id="reviewWord">复习单词</button>
+        <button id="firstWord" class="small">开背单词</button>
+        <button id="nextWord" class="small">继续背词</button>
+        <button id="lastWord" class="small">最后单词</button>
+        <hr/>
+        <button id="saveWord" class="big">存储进度</button>
+        <button id="reviewWord" class="big">复习单词</button>
     </nav>
     <main>
         <p id="en"></p>
@@ -296,9 +328,13 @@
              UI.form.style.display = 'none' ;
              //预读每个用户的背单词的状态
              let learned = localStorage.getItem( Model.user + '-learned') ;
-             Model.learned = JSON.parse(learned) ;
-               
-              learning = [] ;
+             if(learned){
+                Model.learned = JSON.parse(learned) ;
+             }else{
+               Model.learned = [] ;
+             }
+    
+             let learning = [] ;
                   for(let i=0;i < Model.numOfLearning ; i++){
                     let rand = Math.floor(Math.random() * Model.CET6.length ) ;
                     let word = Model.CET6[rand] ;
@@ -355,48 +391,61 @@
             if(txt === Model.learning[pos].cn){
                UI.response("答对了!");
                Model.learning[pos].level -- ;
+               this.className += ' right' ;
             }else{
                UI.response("答错了!");
                Model.learning[pos].level ++ ;
+               this.className += ' wrong' ;
             }
         }
      }
 
      select('button#saveWord').onclick = function(){
         if(Model.pos === Model.numOfLearning -1){
-         let learned = localStorage.getItem(Model.user+'-learned') ;
-         if(learned){
-                 learned = JSON.parse(learned) ;
-                 for(let word of Model.learning){
+         let learned = Model.learned ;
+         if(learned.length >= Model.numOfLearning){
+                for(let word of Model.learning){
                     let found = false ;
                     for(let l of learned){
                         if (l.sn == word.sn){
-                            l.level = word.level ;
+                            if(l.level > word.level )  l.level = word.level ;
                             found = true ;
                             break ;
                         }
                     }
                   if(!found){
-                    learned.push(word) ;
+                    let l = {} ;
+                    l.sn = word.sn ; l.level = word.level ;
+                    learned.push(l) ;
                   } 
                 }
              let str = JSON.stringify(learned);
              localStorage.setItem(Model.user+'-learned' ,str) ;
-             UI.log("您曾学习的单词总数为： " + learned.length + " 个！" ) ;
+            
           }else{
-             let  str = JSON.stringify(Model.learning);
+             learned = [] ;
+             for(let w of Model.learning){
+                let l = {} ;
+                l.sn = w.sn ;
+                l.level = w.level ;
+                learned.push(l) ;
+             }
+             let str = JSON.stringify(learned) ;
              localStorage.setItem(Model.user+'-learned', str) ;
-             UI.log("您已经学习了 " + Model.learning.length + "个单词！" ) ;
+            
           }
+          UI.log("您曾学习的单词总数为： " + learned.length + " 个！" ) ;
         }else{
             UI.log('本组单词还未背完，不能存储学习进度！') ;
         }
      };//saveWord 结束
  
      select('button#reviewWord').onclick = function(){
-       Model.learning = [] ;
+      
       let learned = Model.learned ;
-      let randLearned = function(){
+      if(learned.length >= 2 * Model.numOfLearning){
+       Model.learning = [] ;
+       let randLearned = function(){
           let rand = Math.floor(Math.random() * learned.length) ;
           let word = learned[rand] ;
           if(word.level < 1 ){
@@ -404,10 +453,14 @@
           }else{
             return word ; 
            }
-       } ;
-      for(let i=0;i < Model.numOfLearning  ;i++){
+        } ;
+       for(let i=0;i < Model.numOfLearning  ;i++){
           let word = randLearned() ;
           if(word){
+             let en = Model.CET6[word.sn].en ;
+             let pn = Model.CET6[word.sn].pn ;
+             let cn = Model.CET6[word.sn].cn ;
+             word.cn = cn ; word.en = en ; word.pn = pn ;
              Model.learning.push(word) ;
           }
       }
@@ -415,7 +468,10 @@
       Model.numOfLearning = Model.learning.length ;
       UI.printWord() ;
       UI.response('复习'+ Model.learning.length +'个单词！');
-    } ; //reviewWord 结束
+    }else{
+        UI.log('您没背2组单词，无法进入复习环节！') ;
+    }
+  } ; //reviewWord 结束
      
 
 // 创建全局函数
