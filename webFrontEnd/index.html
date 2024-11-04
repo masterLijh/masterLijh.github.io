@@ -3,58 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>welcome to my home</title>
-    <style>
-        *{
-            /* border: 2px solid blue ; */
-            margin: 0;
-            font-size: 36px;
-            text-align: center;
-        }
-        header{
-            height: 25%;
-            background-color: aquamarine;
-        }
-         main{
-            height: 65% ;
-            background-color: bisque;
-        }
-        footer{
-            height: 10%;
-            background-color: brown;
-            color: white ;
-        }
-    </style>
-    <script>
-        console.time('bigBang') ;
-        let timerBegin = new  Date() ;
-    </script>
+    <title>轻松背单词--CET6</title>
 </head>
+<link rel="stylesheet" href="view.css">
+<script src="model.js">
+ </script>
 <body>
     <header>
-      我的项目
+        CET6-轻轻松松背单词
+        <span id = 'response'>
+        </span>
     </header>
+    <nav>
+        <button id="firstWord" class="small">开背单词</button>
+        <button id="nextWord" class="small">继续背词</button>
+        <button id="lastWord" class="small">最后单词</button>
+        <hr/>
+        <button id="saveWord" class="big">存储进度</button>
+        <button id="reviewWord" class="big">复习单词</button>
+    </nav>
     <main>
-      我的照片
+        <p id="en"></p>
+         <span id ='level'>难度：</span>
+        <p id="pn"></p>
+        <p id="cn1" class="cn"></p>
+        <p id="cn2" class="cn"></p>
+        <p id="cn3" class="cn"></p>
+        <p id="cn4" class="cn"></p>
+        <p id="cn5" class="cn"></p>
+       <hr/>
+    <p id="log"></p>    
     </main>
-    <footer>
-      江西科技师范大学李健宏2024--2025
-    </footer>
-    <script>
-      let myBody = document.querySelector('body');
-       myBody.style.height = innerHeight - 15 + 'px' ;
-       console.timeEnd('bigBang') ;
-       myBody.querySelector('header').textContent = "页面渲染时间：" + ( new Date() - timerBegin ) + 'ms';
-      
-       console.time('xmb') ;
-       timerBegin = new Date() ;
-       let i= 1 ;
-       while (  i < 2**32 / 40 ){
-          i ++ ; 
-         }
-       console.timeEnd('xmb') ;
-       myBody.querySelector('main').textContent = "算一个小目标的时间：" + ( new Date() - timerBegin ) + 'ms';
-    </script>
     
+    <footer>
+        江西科技师范大学李健宏2024--2025
+    </footer>
+    <form>
+        <p>
+            请您登录
+        </p>
+        <p>用户：<input type="text" name="user"/></p>
+        <p>密码：<input type="password" name="pass" /></p>
+        <button id = "signIn">
+           注册
+        </button>
+        <button id = "loginIn">
+           登录
+        </button>
+    </form>
+   <script src="controller.js">
+  
+   </script>
 </body>
 </html>

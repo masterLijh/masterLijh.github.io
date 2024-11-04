@@ -1,0 +1,103 @@
+   *{
+        margin: 0;
+        box-sizing: border-box;
+        text-align: center;
+    }
+   body{
+     font-size: calc(10px+1vh);
+     height: 98vh ;    
+     position: relative;
+    }
+    header{font-size: 2em;
+           height: 15% ;
+           position: relative;
+    }
+    nav{ height: 6% ;}
+    nav button{
+        font-size: 1.2em;
+       }
+    button.small{
+        width: 30%;
+        padding: 0.1em 0.2em;  
+    }
+    button.big{
+        width: 45%;
+        padding: 0.1em 0.5em;  
+    }
+    main{
+        margin-top: 1em;
+        font-size: 1.6em;
+        height: 60% ;
+        position: relative;
+    }
+    main p#en{
+        font-size: 1.6em;
+        color:lightblue;
+        text-shadow: 2px 2px gray ;
+    }
+    main p#pn{
+        font-size: 1.2em;
+        color:lightseagreen;
+       }
+    form{
+        position: absolute ;
+        width: 90% ;
+        height: 50% ;
+        border: 2px solid gray;
+        left: 5% ;
+        top: 10% ;
+        background-color: antiquewhite;
+        font-size: 1.1em ;
+    }
+    form input{
+        font-size: 1.1em ;
+        width: 6em;
+    }
+    form button{
+        font-size: 1.3rem ;
+        margin-right: 1em;
+    }
+    footer{
+        height: 20% ;
+        font-size:1.2em;
+    }
+    span#level{
+        display: block;
+        position: absolute;
+        right:20px;
+        top:1px;
+        color:blue;
+        font-size: 0.5em;
+    }
+    p.cn{
+      border:1px solid blue ;
+      background-color: antiquewhite;
+      cursor: pointer;
+      font-size: 0.8em;
+      margin-bottom: 0.2em;
+    }
+    p.cn.right{
+      background-color: yellow;
+      color: red ;
+    }
+    p.cn.wrong{
+      background-color: gray;
+      color:white;
+    }
+    p.cn:hover{
+        color: blue ;
+    }
+    header span#response{
+        font-size: 0.8em;
+        color: red;
+        position: absolute;
+        right: 0.5em;
+        top:2em;
+    }
+    p#log{
+        background-color: gray;
+        color: white;
+        font-size: 0.5em;
+        padding: 5px 10px;
+        text-align: right;
+    }
