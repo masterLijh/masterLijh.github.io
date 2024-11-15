@@ -97,7 +97,7 @@
     p#log{
         background-color: gray;
         color: white;
-        font-size: 0.5em;
+        font-size: 0.65em;
         padding: 5px 10px;
-        text-align: right;
+        text-align: center;
     }

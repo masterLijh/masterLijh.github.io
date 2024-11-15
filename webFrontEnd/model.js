@@ -105,8 +105,15 @@
                select('p#cn'+ i).textContent =  cnArr[i-1] ;
                select('p#cn'+ i).className = 'cn' ; //清楚用户在点击选择时产生的对、错样式
             }
-
-        UI.log('正在学第 '+ (pos+1)+'/' + Model.numOfLearning + ' 个单词');
+        let s = "" ;
+        if (CET6[pos].timer){
+          let d = CET6[pos].timer ;
+          s = '哟，您在'+ d.getFullYear() +'年' + ( d.getMonth() + 1 ) + '月' + (d.getDate())+ '日'+' 学过'  ; 
+        }else{
+            s = "哟，您这个单词没学过。"
+        }
+        
+        UI.log(s + '@'+ (pos+1)+'/' + Model.numOfLearning  +'.');
 
       } ;
     
@@ -116,7 +123,30 @@
   UI.log = function(s){
     select('p#log').textContent = s ;
   };
+  UI.footerLog = function(s){
+    select('footer').textContent = s ;
+    setTimeout(() => {
+        select('footer').textContent = "江西科技师范大学 李健宏 2024--2025" ;
+    }, 3*1000);
+  };
   UI.response = function(s){
     select('span#response').textContent = s ;
   }
+  UI.userStatus = function(){
+    let easy = 0, normal = 0, hard=0 ;
+    for(let word of Model.learned){
+        if(word.level == 0){
+            easy ++ ;
+        }else if(word.level < 3){
+            normal ++ ;
+         }else{
+            hard ++ ;
+         }
+    }
+    let s = Model.user + '状态: ' +easy +'熟悉/'+ normal +'一般/'+ hard+ '陌生'    ;
+    select('p#title').textContent = s ;
+    setTimeout(()=>{
+        select('p#title').textContent = 'CET6-轻轻松松背单词';
+    },1000*10)
+  } ;
   

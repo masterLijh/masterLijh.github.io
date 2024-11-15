@@ -21,16 +21,16 @@
                     }
                 }
                 if(exist){
-                    UI.log(userName + '已经存在， 注册不成功！') ;
+                    UI.footerLog(userName + '已经存在， 注册不成功！') ;
                 }else{
-                    UI.log(userName + '注册成功！') ;
+                    UI.footerLog(userName + '注册成功！') ;
                     users.push(user) ;
                 }
                 //所有在网络和磁盘IO的异步数据的传送，要用JSON字符串
                 let s = JSON.stringify(users) ;
                 localStorage.setItem('users', s) ;
        }else{//有效的用户名和密码注册
-         UI.log("无效注册，用户名和密码不能为空");
+         UI.footerLog("无效注册，用户名和密码不能为空");
         
        }
     } ; //注册按钮点击事件
@@ -69,15 +69,15 @@
                    }
                   Model.learning =  learning ;
               UI.printWord() ;
+              UI.userStatus() ;  
            }else{ //不允许登录的二种情况，用户名和密码问题， 单词库未加载的问题
              if(!success){
-                  UI.log(userName + '登录不成功，请查看用户名和密码！') ;
+                UI.footerLog(userName + '登录不成功，请查看用户名和密码！') ;
                 }
              if(Model.CET6.length < 5000){
-                UI.log('单词库还未加载完毕，请等会儿再登录！') ;
+                UI.footerLog('单词库还未加载完毕，请等会儿再登录！') ;
              }
           }
-                
         } ; //登录按钮点击事件
 
 
@@ -123,6 +123,7 @@
                Model.learning[pos].level ++ ;
                this.className += ' wrong' ;
             }
+            Model.learning[pos].timer = new Date();
         }
      }
 
@@ -141,7 +142,7 @@
                     }
                   if(!found){
                     let l = {} ;
-                    l.sn = word.sn ; l.level = word.level ;
+                    l.sn = word.sn ; l.level = word.level ; l.timer = word.timer;
                     learned.push(l) ;
                   } 
                 }
@@ -160,9 +161,10 @@
              localStorage.setItem(Model.user+'-learned', str) ;
             
           }
-          UI.log("您曾学习的单词总数为： " + learned.length + " 个！" ) ;
+          UI.log("您曾学过单词总计： " + learned.length + " 个！" ) ;
+          UI.userStatus() ;
         }else{
-            UI.log('本组单词还未背完，不能存储学习进度！') ;
+          UI.log('本组单词还未背完，不能存储学习进度！') ;
         }
      };//saveWord 结束
  
