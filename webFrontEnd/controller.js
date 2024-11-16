@@ -131,24 +131,23 @@
         if(Model.pos === Model.numOfLearning -1){
          let learned = Model.learned ;
          if(learned.length >= Model.numOfLearning){
-                for(let word of Model.learning){
+              for(let word of Model.learning){
                     let found = false ;
                     for(let l of learned){
                         if (l.sn == word.sn){
+                            if(word.timer) l.timer = word.timer ;
                             if(l.level > word.level )  l.level = word.level ;
                             found = true ;
                             break ;
                         }
                     }
                   if(!found){
-                    let l = {} ;
-                    l.sn = word.sn ; l.level = word.level ; l.timer = word.timer;
-                    learned.push(l) ;
-                  } 
+                    let w = {} ;
+                    w.sn = word.sn ; w.level = word.level ; 
+                    if(word.timer) w.timer = word.timer;
+                    learned.push(w) ;
+                  }
                 }
-             let str = JSON.stringify(learned);
-             localStorage.setItem(Model.user+'-learned' ,str) ;
-            
           }else{
              learned = [] ;
              for(let w of Model.learning){
@@ -157,10 +156,9 @@
                 l.level = w.level ;
                 learned.push(l) ;
              }
-             let str = JSON.stringify(learned) ;
-             localStorage.setItem(Model.user+'-learned', str) ;
-            
-          }
+            }
+          let str = JSON.stringify(learned) ;
+          localStorage.setItem(Model.user+'-learned', str) ;
           UI.log("您曾学过单词总计： " + learned.length + " 个！" ) ;
           UI.userStatus() ;
         }else{
@@ -197,7 +195,7 @@
       UI.printWord() ;
       UI.response('复习'+ Model.learning.length +'个单词！');
     }else{
-        UI.log('您没背2组单词，无法进入复习环节！') ;
+      UI.log('您没背完2组单词，不能进入复习环节！') ;
     }
   } ; //reviewWord 结束
      

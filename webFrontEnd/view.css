@@ -20,6 +20,15 @@
         width: 30%;
         padding: 0.1em 0.2em;  
     }
+    button{
+        display: inline;
+        border: none;
+        background-color: black;
+        color:greenyellow;
+    }
+    button:hover{
+        color:white;
+    }
     button.big{
         width: 45%;
         padding: 0.1em 0.5em;  
