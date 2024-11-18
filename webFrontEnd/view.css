@@ -8,9 +8,18 @@
      height: 98vh ;    
      position: relative;
     }
-    header{font-size: 2em;
+    header{font-size: 1.8em;
            height: 15% ;
            position: relative;
+    }
+    header p#status{
+        font-size: 0.6em;
+        color: orangered;
+    }
+    header p#status span{
+        font-size: 1.2em;
+        color: red ;
+        font-weight: bold;
     }
     nav{ height: 6% ;}
     nav button{
@@ -96,12 +105,12 @@
     p.cn:hover{
         color: blue ;
     }
-    header span#response{
-        font-size: 0.8em;
+    main span#response{
+        font-size: 1.8em;
         color: red;
         position: absolute;
         right: 0.5em;
-        top:2em;
+        top:3em;
     }
     p#log{
         background-color: gray;

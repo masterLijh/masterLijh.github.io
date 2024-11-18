@@ -96,8 +96,7 @@
                 Model.pos = 0 ;
             }
                UI.printWord() ;
-               UI.response('加油，继续吧！');
-              
+                           
         } 
 
         select('button#lastWord').onclick = function(){

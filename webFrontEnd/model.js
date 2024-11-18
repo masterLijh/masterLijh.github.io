@@ -1,7 +1,7 @@
 //Model用于记录程序的数据和运行状态
     let Model = { 
         timerBegin : new Date() ,
-        numOfLearning : 10,
+        numOfLearning : 30,
         learning : [] ,
         learned : []
     } ;
@@ -131,11 +131,14 @@
   };
   UI.response = function(s){
     select('span#response').textContent = s ;
+    setTimeout(() => {
+        select('span#response').textContent = '' ;
+    }, 2000);
   }
   UI.userStatus = function(){
     let easy = 0, normal = 0, hard=0 ;
     for(let word of Model.learned){
-        if(word.level == 0){
+        if(word.level <= 0){
             easy ++ ;
         }else if(word.level < 3){
             normal ++ ;
@@ -143,10 +146,10 @@
             hard ++ ;
          }
     }
-    let s = Model.user + '状态: ' +easy +'熟悉/'+ normal +'一般/'+ hard+ '陌生'    ;
-    select('p#title').textContent = s ;
-    setTimeout(()=>{
-        select('p#title').textContent = 'CET6-轻轻松松背单词';
-    },1000*10)
+    select('p#status span#user').textContent = Model.user ;
+    select('p#status span#easy').textContent = easy ;
+    select('p#status span#normal').textContent = normal ;
+    select('p#status span#hard').textContent = hard ;
+
   } ;
   
