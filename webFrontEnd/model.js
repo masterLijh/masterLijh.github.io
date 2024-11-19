@@ -39,14 +39,14 @@
     .then(txt => {
         Model.CET6 = [] ;
         createCET6(txt) ;
-        UI.log('系统成功读取了'+ Model.CET6.length +'个单词！') ;
+        UI.footerLog('系统成功读取了'+ Model.CET6.length +'个单词！') ;
     }) ;
     setTimeout(function(){ //读取cet/cet2.txt
         fetch('cet/cet2.txt') //读取cet/cet2.txt
         .then(resp => resp.text())
         .then(txt => {
          createCET6(txt) ;
-        UI.log('系统成功读取了'+ Model.CET6.length +'个单词！') ;
+        UI.footerLog('系统成功读取了'+ Model.CET6.length +'个单词！') ;
     }) ;
     } , 2 * 1000); 
     setTimeout(function(){
@@ -54,7 +54,7 @@
         .then(res => res.text())
         .then(txt => {
             createCET6(txt) ;
-            UI.log('系统最后成功读取了'+ Model.CET6.length +'个单词！') ;
+            UI.footerLog('系统最后成功读取了'+ Model.CET6.length +'个单词！') ;
         } );
     } , 5 * 1000) ;
     
@@ -75,13 +75,16 @@
  let UI = {} ; //UI用于表达用户界面，以及改变用户界面上的的内容
    UI.printWord = function(){ //用于把当前单词（Model.pos存储的索引）显示出来
        //让全局变量与局部变量联系起来
-            let CET6 = Model.learning ;
+            let CET6 = Model.CET6 ;
+            let learning = Model.learning ;
             let pos = Model.pos ;
+            let currentWord = learning[pos].sn ;
 
-            select('p#en').textContent = CET6[pos].en ;
-            select('p#pn').textContent = CET6[pos].pn ;
+            select('p#en').textContent = CET6[parseInt(currentWord)].en ;
+            select('p#pn').textContent = CET6[parseInt(currentWord)].pn ;
+            let correctCn = CET6[parseInt(currentWord)].cn ;
             
-            select('span#level').textContent = '难度: ' + CET6[pos].level;
+            select('span#level').textContent = '难度: ' + learning[pos].level;
             //产生一个数组，包含5个单词的中文，其中一个是单词本身
             let cnArr = [] ;
             
@@ -90,15 +93,15 @@
                 let lv = Math.random() * (5 - i) ;
                 if(lv < 1 && !ok ){
                     ok = true ;
-                    cnArr.push(CET6[pos].cn) ;
+                    cnArr.push(correctCn) ;
                 }else{
-                    let rand = Math.floor(Math.random() * Model.CET6.length ) ;
-                    cnArr.push(Model.CET6[rand].cn) ;
+                    let rand = Math.floor(Math.random() * CET6.length ) ;
+                    cnArr.push(CET6[rand].cn) ;
                     }
              }//循环5次，产生中文随机数组
              if(!ok){
                     ok = true ;
-                    cnArr[4] = CET6[pos].cn ;
+                    cnArr[4] = correctCn ;
                 }
                
             for(let i=1; i<6 ;i++){
@@ -106,20 +109,18 @@
                select('p#cn'+ i).className = 'cn' ; //清楚用户在点击选择时产生的对、错样式
             }
         let s = "" ;
-        if (CET6[pos].timer){
-          let d = CET6[pos].timer ;
+        if (learning[pos].timer){
+          let d = learning[pos].timer ;
           s = '哟，您在'+ d.getFullYear() +'年' + ( d.getMonth() + 1 ) + '月' + (d.getDate())+ '日'+' 学过'  ; 
         }else{
             s = "哟，您这个单词没学过。"
         }
         
-        UI.log(s + '@'+ (pos+1)+'/' + Model.numOfLearning  +'.');
+        UI.log(s + '本组进度@'+ (pos+1)+'/' + Model.numOfLearning  +'.');
 
       } ;
     
  
-
-
   UI.log = function(s){
     select('p#log').textContent = s ;
   };

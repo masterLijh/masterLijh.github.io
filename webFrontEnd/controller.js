@@ -58,13 +58,25 @@
                 Model.learned = JSON.parse(learned) ;
              }else{
                Model.learned = [] ;
+               learned = [] ;
              }
     
              let learning = [] ;
+             
                   for(let i=0;i < Model.numOfLearning ; i++){
                     let rand = Math.floor(Math.random() * Model.CET6.length ) ;
-                    let word = Model.CET6[rand] ;
+                    let word = {} ;
                         word.sn = rand ;
+                        word.level = Model.CET6[rand].level ;
+                        if(learned.length > 1){
+                           for(let ld of learned){
+                              if(ld.sn == rand){
+                                 word.level = ld.level;
+                                 word.timer = ld.timer ? ld.timer : null ;
+                                 break;
+                              }
+                           }
+                        }
                     learning.push(word) ;
                    }
                   Model.learning =  learning ;
@@ -113,7 +125,8 @@
             // console.log(cn.textContent) ;
             let txt = cn.textContent ;
             let pos = Model.pos ;
-            if(txt === Model.learning[pos].cn){
+            let currentWord = Model.learning[pos].sn ;
+            if(txt === Model.CET6[currentWord].cn){
                UI.response("答对了!");
                Model.learning[pos].level -- ;
                this.className += ' right' ;
@@ -142,7 +155,8 @@
                     }
                   if(!found){
                     let w = {} ;
-                    w.sn = word.sn ; w.level = word.level ; 
+                    w.sn = word.sn ; 
+                    w.level = word.level ; 
                     if(word.timer) w.timer = word.timer;
                     learned.push(w) ;
                   }
