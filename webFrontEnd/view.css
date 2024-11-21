@@ -92,6 +92,7 @@
       background-color: antiquewhite;
       cursor: pointer;
       font-size: 0.8em;
+      padding:0.2em 0.1em ;
       margin-bottom: 0.2em;
     }
     p.cn.right{

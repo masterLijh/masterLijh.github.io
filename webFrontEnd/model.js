@@ -78,11 +78,11 @@
             let CET6 = Model.CET6 ;
             let learning = Model.learning ;
             let pos = Model.pos ;
-            let currentWord = learning[pos].sn ;
+            let currentSn = parseInt(learning[pos].sn) ;
 
-            select('p#en').textContent = CET6[parseInt(currentWord)].en ;
-            select('p#pn').textContent = CET6[parseInt(currentWord)].pn ;
-            let correctCn = CET6[parseInt(currentWord)].cn ;
+            select('p#en').textContent = CET6[currentSn].en ;
+            select('p#pn').textContent = CET6[currentSn].pn ;
+            let correctCn = CET6[currentSn].cn ;
             
             select('span#level').textContent = '难度: ' + learning[pos].level;
             //产生一个数组，包含5个单词的中文，其中一个是单词本身
@@ -116,7 +116,7 @@
             s = "哟，您这个单词没学过。"
         }
         
-        UI.log(s + '本组进度@'+ (pos+1)+'/' + Model.numOfLearning  +'.');
+        UI.log(s + '--本组进度@'+ (pos+1)+'/' + Model.numOfLearning  +'.');
 
       } ;
     

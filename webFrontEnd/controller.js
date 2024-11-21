@@ -68,7 +68,7 @@
                     let word = {} ;
                         word.sn = rand ;
                         word.level = Model.CET6[rand].level ;
-                        if(learned.length > 1){
+                        if(learned.length > Model.numOfLearning ){
                            for(let ld of learned){
                               if(ld.sn == rand){
                                  word.level = ld.level;
@@ -79,7 +79,7 @@
                         }
                     learning.push(word) ;
                    }
-                  Model.learning =  learning ;
+                Model.learning =  learning ;
               UI.printWord() ;
               UI.userStatus() ;  
            }else{ //不允许登录的二种情况，用户名和密码问题， 单词库未加载的问题
@@ -123,15 +123,19 @@
      for(let cn of UI.cnDoms){
         cn.onclick = function(){
             // console.log(cn.textContent) ;
+            let smile = ['😀','😁','😄','😉','😊','😋'] ;
+            let cry = ['😒','😓','😧','😩','😭','😖'] ;
             let txt = cn.textContent ;
             let pos = Model.pos ;
-            let currentWord = Model.learning[pos].sn ;
-            if(txt === Model.CET6[currentWord].cn){
-               UI.response("答对了!");
+            let currentSn = Model.learning[pos].sn ;
+            if(txt === Model.CET6[currentSn].cn){
+               let s = smile[Math.floor(Math.random()*smile.length)] ;
+               UI.response( s+ "对"+s);
                Model.learning[pos].level -- ;
                this.className += ' right' ;
             }else{
-               UI.response("答错了!");
+               let s = cry[Math.floor(Math.random()*smile.length)] ;
+               UI.response( s+ "错"+s);
                Model.learning[pos].level ++ ;
                this.className += ' wrong' ;
             }
@@ -157,7 +161,9 @@
                     let w = {} ;
                     w.sn = word.sn ; 
                     w.level = word.level ; 
-                    if(word.timer) w.timer = word.timer;
+                    if(word.timer) {
+                     w.timer = word.timer;
+                    }
                     learned.push(w) ;
                   }
                 }
