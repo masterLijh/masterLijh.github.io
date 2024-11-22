@@ -130,16 +130,21 @@
             let currentSn = Model.learning[pos].sn ;
             if(txt === Model.CET6[currentSn].cn){
                let s = smile[Math.floor(Math.random()*smile.length)] ;
-               UI.response( s+ "对"+s);
+               UI.response( s+ "对" + s);
                Model.learning[pos].level -- ;
                this.className += ' right' ;
             }else{
                let s = cry[Math.floor(Math.random()*smile.length)] ;
-               UI.response( s+ "错"+s);
+               UI.response( s+ "错" + s);
                Model.learning[pos].level ++ ;
                this.className += ' wrong' ;
             }
-            Model.learning[pos].timer = new Date();
+            let timer = new Date() ;
+            let year = timer.getFullYear() % 100 + '' ;
+            let month = timer.getMonth() + 1 ;
+                month > 9 ? month = month :  month = '0' + month  ;
+            let date = timer.getDate() ;
+            Model.learning[pos].timer = year + month + date;
         }
      }
 

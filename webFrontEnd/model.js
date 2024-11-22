@@ -111,7 +111,7 @@
         let s = "" ;
         if (learning[pos].timer){
           let d = learning[pos].timer ;
-          s = '哟，您在'+ d.getFullYear() +'年' + ( d.getMonth() + 1 ) + '月' + (d.getDate())+ '日'+' 学过'  ; 
+          s = '哟，您在'+ d.slice(0,2) +'年' +  d.slice(2,4)  + '月' + (d.slice(4))+ '日'+' 学过'  ; 
         }else{
             s = "哟，您这个单词没学过。"
         }
